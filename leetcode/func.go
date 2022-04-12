@@ -42,7 +42,7 @@ func parseProblemFunc(s string) (ProblemFunc, error) {
 	return f, nil
 }
 
-func (f ProblemFunc) Output() string {
+func (f ProblemFunc) Signature() string {
 	paramStrs := make([]string, len(f.params))
 	for i, p := range f.params {
 		paramStrs[i] = fmt.Sprintf("%v %v", p.name, p.typ.String())

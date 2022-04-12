@@ -71,6 +71,7 @@ func getProblemDescriptor(titleSlug string) (problemDescriptor, error) {
 query questionData($titleSlug: String!) {
   question(titleSlug: $titleSlug) {
     exampleTestcases
+		content
     codeSnippets {
       lang
       langSlug

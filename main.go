@@ -1,22 +1,24 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/sebnyberg/leetgen/leetcode"
 )
 
-func main() {
-	// Todo: use CWD to fetch package name for output file
-	// cwd, err := os.Getwd()
-	// if err != nil {
-	// 	panic(err)
-	// }
+var problemName = flag.String("problem", "", "problem stub, e.g. two-sum")
 
-	problem, err := leetcode.GetProblem("search-insert-position")
+func main() {
+	flag.Parse()
+	if len(*problemName) == 0 {
+		fmt.Println(`missing problem name, provide with e.g. -problem "two-sum"`)
+	}
+	problem, err := leetcode.GetProblem(*problemName)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println(problem.Fn.Output())
+	problem.WriteStub(os.Stdout)
 }
