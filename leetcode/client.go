@@ -42,7 +42,6 @@ type problemDescriptor struct {
 	Title              string                  `json:"title"`
 	TitleSlug          string                  `json:"titleSlug"`
 	Content            string                  `json:"content"`
-	ExampleTestcases   string                  `json:"exampleTestcases"`
 	CodeSnippets       []codeSnippetDescriptor `json:"codeSnippets"`
 }
 
@@ -70,7 +69,6 @@ func getProblemDescriptor(titleSlug string) (problemDescriptor, error) {
 	const query = `
 query questionData($titleSlug: String!) {
   question(titleSlug: $titleSlug) {
-    exampleTestcases
 		content
     codeSnippets {
       lang

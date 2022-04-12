@@ -123,7 +123,7 @@ func parseExampleRowContents(p *exampleParser) stateFn {
 			}
 			panic(s)
 		case html.TextToken:
-			s := strings.TrimSpace(p.z.Token().String())
+			s := html.UnescapeString(strings.TrimSpace(p.z.Token().String()))
 			if s == "" {
 				break
 			}

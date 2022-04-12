@@ -99,9 +99,9 @@ func (p *Problem) WriteStub(w io.Writer) (err error) {
 		} else {
 			vars = append(vars, varToGoFormat(p.Fn.params[0].typ, output))
 		}
-		if len(strings.Join(inputs, ","))+len(output) < 120 {
-			// Write everything on one row
-			writes("{ %v },", strings.Join(vars, ", "))
+		single := fmt.Sprintf("{%v},", strings.Join(vars, ", "))
+		if len(single) < 65 {
+			writes(single)
 			return
 		}
 		// Write on multiple rows
@@ -113,6 +113,13 @@ func (p *Problem) WriteStub(w io.Writer) (err error) {
 	}
 
 	writes("package leetcode\n")
+	writesin("import (")
+	writes(`fmt`)
+	writes("\"testing\"\n")
+
+	writes("\"github.com/stretchr/testify/require\"")
+	writesout(")")
+
 	writesin("func Test_%v(t *testing.T) {", p.Fn.name)
 	writesin("type testCase struct {")
 	for _, param := range p.Fn.params {
@@ -134,14 +141,14 @@ func (p *Problem) WriteStub(w io.Writer) (err error) {
 	writesin(`t.Run(fmt.Sprintf("TestCase %%v", i), func(t *testing.T) {`)
 	argNames := make([]string, len(p.Fn.params))
 	for i := range argNames {
-		argNames[i] = p.Fn.params[i].name
+		argNames[i] = "tc." + p.Fn.params[i].name
 	}
 	funcCall := fmt.Sprintf("%v(%v)", p.Fn.name, strings.Join(argNames, ", "))
 	if p.Fn.retType != paramTypNone {
 		writes("require.Equal(t, tc.want, %v)", funcCall)
 	} else {
 		writes(funcCall)
-		writes("require.Equal(t, tc.want, %v)", p.Fn.params[0].name)
+		writes("require.Equal(t, tc.want, tc.%v)", p.Fn.params[0].name)
 	}
 	writesout("})")
 	writesout("}")
@@ -151,10 +158,12 @@ func (p *Problem) WriteStub(w io.Writer) (err error) {
 }
 
 var bracketReplacer = strings.NewReplacer("[", "{", "]", "}")
+var spacer = strings.NewReplacer(",", ", ")
 
 func varToGoFormat(typ paramTyp, s string) string {
 	// For any type of slice, prefix the "[]" or "[][]", the type, then replace
 	// all "[" with "{" and vice versa
+	s = spacer.Replace(s)
 	if typ&paramTypSlice > 0 {
 		return typ.String() + bracketReplacer.Replace(s)
 	}

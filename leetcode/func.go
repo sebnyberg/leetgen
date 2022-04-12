@@ -47,7 +47,7 @@ func (f ProblemFunc) Signature() string {
 	for i, p := range f.params {
 		paramStrs[i] = fmt.Sprintf("%v %v", p.name, p.typ.String())
 	}
-	return fmt.Sprintf("func %v(%v) %v {\n\t\n}",
+	return fmt.Sprintf("func %v(%v) %v {\n\tpanic(\"unimplemented\")\n}",
 		f.name,
 		strings.Join(paramStrs, ", "),
 		f.retType.String(),
