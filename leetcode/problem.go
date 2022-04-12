@@ -48,7 +48,7 @@ func GetProblem(titleSlug string) (*Problem, error) {
 }
 
 // WriteStub writes a problem stub to the provided writer.
-func (p *Problem) WriteStub(w io.Writer) (err error) {
+func (p *Problem) WriteStub(w io.Writer, packageName string) (err error) {
 	buf := make([]byte, 0, 128)
 
 	// Indent helpers
@@ -112,12 +112,12 @@ func (p *Problem) WriteStub(w io.Writer) (err error) {
 		writesout("},")
 	}
 
-	writes("package leetcode\n")
+	writes("package %v\n", packageName)
 	writesin("import (")
-	writes(`fmt`)
+	writes(`"fmt"`)
 	writes("\"testing\"\n")
 
-	writes("\"github.com/stretchr/testify/require\"")
+	writes(`"github.com/stretchr/testify/require"`)
 	writesout(")")
 
 	writesin("func Test_%v(t *testing.T) {", p.Fn.name)

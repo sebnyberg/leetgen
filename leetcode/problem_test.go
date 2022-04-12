@@ -21,5 +21,5 @@ func TestProblem(t *testing.T) {
 			},
 		},
 	}
-	require.NoError(t, p.WriteStub(os.Stdout))
+	require.NoError(t, p.WriteStub(os.Stdout, "leetcode"))
 }
