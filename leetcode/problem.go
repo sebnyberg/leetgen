@@ -118,7 +118,7 @@ func (p *Problem) WriteStub(w io.Writer, packageName string) (err error) {
 	writes("\"testing\"\n")
 
 	writes(`"github.com/stretchr/testify/require"`)
-	writesout(")")
+	writesout(")\n")
 
 	writesin("func Test_%v(t *testing.T) {", p.Fn.name)
 	writesin("type testCase struct {")
